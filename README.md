@@ -1,4 +1,4 @@
-# Banner Creation Tool
+# Banner Creation Guide
 
 A free, interactive web tool that helps activists and organizers create effective protest banners based on their specific needs, budget, and available resources.
 
