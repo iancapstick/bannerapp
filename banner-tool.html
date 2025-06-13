@@ -383,6 +383,54 @@
             user-select: none;
         }
         
+        .tip-category {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .tip-category:hover {
+            border-color: #3498db;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.1);
+        }
+        
+        .tip-category h4 {
+            color: #495057;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tip-category-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .product-highlight {
+            background: #e7f3ff;
+            border-left: 3px solid #3498db;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+        }
+        
+        .product-highlight strong {
+            color: #1976d2;
+        }
+        
         .button-group {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -575,8 +623,8 @@
                 options: [
                     { value: 'sewers', text: 'Sewers/quilters' },
                     { value: 'painters', text: 'Painters/artists' },
-                    { value: 'screen', text: 'Screen printers' },
-                    { value: 'digital', text: 'Graphic designers/vinyl cutters' },
+                    { value: 'screen', text: 'Screen printers/vinyl cutters' },
+                    { value: 'digital', text: 'Graphic designers' },
                     { value: 'basic', text: 'Basic only' },
                     { value: 'mixed', text: 'Mixed group' }
                 ]
@@ -592,6 +640,7 @@
                     { value: 'printers', text: 'Large printers/plotters' },
                     { value: 'projectors', text: 'Projectors (for tracing)' },
                     { value: 'screen-print', text: 'Screen printing setup' },
+                    { value: 'vinyl', text: 'Vinyl cutter (Cricut/Silhouette)' },
                     { value: 'household', text: 'Just basic household items' },
                     { value: 'makerspace', text: 'Maker space/full workshop' }
                 ]
@@ -904,8 +953,14 @@
         function generateRecommendation() {
             let materials = [];
             let methods = [];
-            let tips = [];
+            let tips = {};
             const specs = calculateBannerSpecs();
+            
+            // Initialize tip categories
+            tips.lettering = [];
+            tips.construction = [];
+            tips.weatherproofing = [];
+            tips.finishing = [];
             
             // BUDGET-APPROPRIATE MATERIALS
             if (answers.budget === 'minimal') {
@@ -917,6 +972,9 @@
                 materials.push('Old bedsheets (free from thrift stores)');
                 materials.push('Cardboard from appliance boxes');
                 materials.push('House paint leftovers or cheap tempera paint');
+                materials.push('Glue sticks for paper letter placement');
+                materials.push('Double-sided tape or spray adhesive');
+                
                 if (answers.timeline !== 'emergency') {
                     materials.push('Paper grocery bags (iron flat and tape together)');
                 }
@@ -932,25 +990,37 @@
                 materials.push('Canvas drop cloths ($10-15 at hardware stores)');
                 materials.push('Acrylic craft paint ($1-2 per bottle)');
                 materials.push('Foam core boards for structure');
+                materials.push('Pre-made letter stencils from craft stores ($5-15)');
+                materials.push('Tacky glue (Aleene\'s) for heavier materials');
+                materials.push('Spray adhesive (3M Super 77) for professional finish');
+                
                 if (answers.skills && answers.skills.includes('sewers')) {
                     materials.push('Quilting cotton from fabric stores ($5-8/yard on sale)');
+                    materials.push('Fusible web (Wonder Under or Heat n Bond Lite) ($3-5)');
                 }
             } else if (answers.budget === 'moderate') {
                 materials.push('Banner vinyl ($30-50 for 4\'×8\' / 122×244cm)');
                 materials.push('Ripstop nylon fabric');
                 materials.push('Professional fabric paint or screen printing ink');
                 materials.push('Grommets and grommet tool');
+                materials.push('Professional letter stencils or custom-cut templates');
+                materials.push('Heavy-duty fusible web (Heat n Bond Ultra Hold)');
+                materials.push('Craft adhesive (E6000) for heavy-duty bonding');
+                
                 if (answers.skills && answers.skills.includes('sewers')) {
                     materials.push('Quality quilting cotton or canvas');
+                    materials.push('Double stick fusible web (Steam-a-Seam 2)');
                 }
             } else {
                 materials.push('Professional banner material with hem and grommets');
                 materials.push('Heavy-duty vinyl or mesh banner');
                 materials.push('Digital printing services ($10-20 per sq ft)');
                 materials.push('Professional sign vinyl for lettering');
+                materials.push('Vinyl application tools (squeegee, transfer tape)');
+                materials.push('Professional adhesives and heat press equipment');
             }
             
-            // SKILL-SPECIFIC METHODS
+            // SKILL-SPECIFIC METHODS AND VINYL CUTTER SUPPORT
             if (answers.skills && answers.skills.includes('sewers')) {
                 if (answers.budget === 'minimal' || answers.budget === 'low') {
                     methods.push('Patchwork technique: sew together fabric scraps in a quilt pattern');
@@ -963,12 +1033,12 @@
                     methods.push('Embroidered details for emphasis');
                 }
                 
-                // Sewing-specific construction tips
-                tips.push('Use a walking foot for thick layers');
-                tips.push('Baste layers before final stitching');
-                tips.push('French seams for professional finish on lightweight fabrics');
-                tips.push('Flat-fell seams for heavy-duty construction');
-                tips.push('Pre-wash all fabrics to prevent shrinking');
+                // Sewing-specific tips organized by category
+                tips.construction.push('Use a walking foot for thick layers');
+                tips.construction.push('Baste layers before final stitching');
+                tips.finishing.push('French seams for professional finish on lightweight fabrics');
+                tips.finishing.push('Flat-fell seams for heavy-duty construction');
+                tips.construction.push('Pre-wash all fabrics to prevent shrinking');
             }
             
             if (answers.skills && answers.skills.includes('painters')) {
@@ -982,28 +1052,58 @@
                     methods.push('Gradient/ombré backgrounds with sponges');
                 }
                 
-                // Painting style tips
-                tips.push('One-stroke lettering: load brush with two colors for dimension');
-                tips.push('Block letters with drop shadows for visibility');
-                tips.push('Use chalk to sketch before painting');
-                tips.push('Dry brush technique for texture');
-                tips.push('Keep paint consistency like heavy cream');
+                // Painting tips by category
+                tips.lettering.push('Use painter\'s tape for crisp letter edges');
+                tips.lettering.push('Apply multiple thin coats rather than one thick coat');
+                tips.construction.push('Prime fabric with gesso for better paint adhesion');
+                tips.finishing.push('Seal painted areas with acrylic medium for durability');
+            }
+            
+            // Check for vinyl cutter access
+            if (answers.tools && answers.tools.includes('vinyl')) {
+                methods.push('Cut vinyl letters for professional appearance');
+                methods.push('Heat transfer vinyl (HTV) for fabric banners');
+                methods.push('Adhesive vinyl for rigid surfaces');
+                tips.lettering.push('Weed vinyl carefully with weeding tools');
+                tips.lettering.push('Use transfer tape for precise letter placement');
+                tips.lettering.push('Apply vinyl from center outward to avoid bubbles');
+            }
+            
+            // LETTERING TIPS based on budget
+            if (answers.budget === 'minimal') {
+                tips.lettering.push('Cut letters from contrasting colored paper or fabric');
+                tips.lettering.push('Use glue sticks for repositionable placement before final adhesion');
+            } else if (answers.budget === 'low' || answers.budget === 'moderate') {
+                tips.lettering.push('Buy pre-made stencils for consistent lettering');
+                tips.lettering.push('Use spray adhesive on back of letters for smooth application');
+                tips.lettering.push('Apply letters from center outward to avoid bubbles');
+            } else {
+                tips.lettering.push('Use professional vinyl lettering for perfect results');
+                tips.lettering.push('Apply transfer tape for precise letter spacing');
             }
             
             if (answers.skills && answers.skills.includes('screen')) {
                 methods.push('Photo emulsion screens for detailed designs');
                 methods.push('Paper stencil method for quick screens');
                 methods.push('Multi-color registration printing');
-                tips.push('Flood screen between prints for consistency');
-                tips.push('Use squeegee at 45-degree angle');
-                tips.push('Heat-set prints at 320°F (160°C) for 30 seconds');
+                tips.lettering.push('Flood screen between prints for consistency');
+                tips.construction.push('Use squeegee at 45-degree angle');
+                tips.finishing.push('Heat-set prints at 320°F (160°C) for 30 seconds');
+                
+                // If they have screen printing AND vinyl cutter
+                if (answers.tools && answers.tools.includes('vinyl')) {
+                    methods.push('Use vinyl cutter to create screen printing stencils');
+                    tips.lettering.push('Cut vinyl stencils for precise screen printing registration');
+                }
             }
             
             if (answers.skills && answers.skills.includes('digital')) {
                 if (answers.budget === 'moderate' || answers.budget === 'higher') {
-                    methods.push('Design in vector format for vinyl cutting');
-                    methods.push('Print-and-cut for complex designs');
-                    methods.push('Heat transfer vinyl for fabric banners');
+                    methods.push('Design in vector format for scalability');
+                    methods.push('Create print-ready files at actual size');
+                    if (answers.tools && answers.tools.includes('vinyl')) {
+                        methods.push('Export designs for vinyl cutting');
+                    }
                 } else {
                     methods.push('Tile printing: print on multiple sheets and assemble');
                     methods.push('Design templates for hand-painting guides');
@@ -1013,49 +1113,49 @@
             // DISPLAY-SPECIFIC CONSTRUCTION
             if (answers.display === 'march') {
                 if (answers.size === 'solo') {
-                    tips.push('Use paint stir sticks or 1/2" (1.3cm) dowels for handles');
-                    tips.push('Attach handle to back center with duct tape or hot glue');
-                    tips.push('Consider double-sided design for 360° visibility');
-                    tips.push('Keep total weight under 2 lbs (0.9kg) for comfort');
+                    tips.construction.push('Use paint stir sticks or 1/2" (1.3cm) dowels for handles');
+                    tips.construction.push('Attach handle to back center with duct tape or hot glue');
+                    tips.construction.push('Consider double-sided design for 360° visibility');
+                    tips.construction.push('Keep total weight under 2 lbs (0.9kg) for comfort');
                 } else if (answers.size === 'small') {
-                    tips.push('Mark hand positions with colored tape');
-                    tips.push('Use PVC connectors for modular assembly');
-                    tips.push('Distribute weight evenly among carriers');
+                    tips.construction.push('Mark hand positions with colored tape');
+                    tips.construction.push('Use PVC connectors for modular assembly');
+                    tips.construction.push('Distribute weight evenly among carriers');
                 } else {
-                    tips.push('Use PVC pipe frame for larger banners');
-                    tips.push('Add corner reinforcements');
-                    tips.push('Consider wheels for very large banners');
+                    tips.construction.push('Use PVC pipe frame for larger banners');
+                    tips.construction.push('Add corner reinforcements');
+                    tips.construction.push('Consider wheels for very large banners');
                 }
             } else if (answers.display === 'drop') {
-                tips.push('Reinforced top pocket for 2" (5cm) PVC pipe or rope');
-                tips.push('Bottom hem with chain or rebar for weight');
-                tips.push('Quick-release system with carabiners');
-                tips.push('Practice deployment with smaller test banner');
+                tips.construction.push('Reinforced top pocket for 2" (5cm) PVC pipe or rope');
+                tips.construction.push('Bottom hem with chain or rebar for weight');
+                tips.construction.push('Quick-release system with carabiners');
+                tips.construction.push('Practice deployment with smaller test banner');
             } else if (answers.display === 'street') {
-                tips.push('Use aircraft cable for spanning');
-                tips.push('Add corner reinforcements with webbing');
-                tips.push('Include safety breakaway if over traffic');
+                tips.construction.push('Use aircraft cable for spanning');
+                tips.construction.push('Add corner reinforcements with webbing');
+                tips.construction.push('Include safety breakaway if over traffic');
             }
             
             // WEATHER-SPECIFIC CONSTRUCTION
             if (answers.weather === 'indoor') {
-                tips.push('No weatherproofing needed - focus on aesthetics');
-                tips.push('Can use delicate materials like tissue paper or thin fabrics');
+                tips.weatherproofing.push('No weatherproofing needed - focus on aesthetics');
+                tips.weatherproofing.push('Can use delicate materials like tissue paper or thin fabrics');
             } else if (answers.weather === 'rain' || answers.weather === 'maybe-rain') {
                 if (answers.budget === 'minimal') {
-                    tips.push('Clear packing tape over paper elements');
-                    tips.push('Garbage bags as emergency rain covers');
+                    tips.weatherproofing.push('Clear packing tape over paper elements');
+                    tips.weatherproofing.push('Garbage bags as emergency rain covers');
                 } else {
-                    tips.push('Marine-grade thread for all seams');
-                    tips.push('Silicone spray for water repellency');
-                    tips.push('Heat-sealed edges on synthetic materials');
+                    tips.weatherproofing.push('Marine-grade thread for all seams');
+                    tips.weatherproofing.push('Silicone spray for water repellency');
+                    tips.weatherproofing.push('Heat-sealed edges on synthetic materials');
                 }
             }
             
             if (answers.weather === 'wind') {
-                tips.push('Wind slits: 6" (15cm) curved cuts every 3 feet (91cm)');
-                tips.push('Reinforce all stress points with webbing');
-                tips.push('Use bungee cords instead of rigid attachments');
+                tips.weatherproofing.push('Wind slits: 6" (15cm) curved cuts every 3 feet (91cm)');
+                tips.weatherproofing.push('Reinforce all stress points with webbing');
+                tips.weatherproofing.push('Use bungee cords instead of rigid attachments');
             }
             
             // TIMELINE-BASED METHODS
@@ -1063,23 +1163,29 @@
                 methods.push('Pre-cut vinyl letters from sign shop');
                 methods.push('Duct tape lettering on contrasting background');
                 methods.push('Sharpie markers on light-colored fabric');
-                tips.push('Assign each person one letter to create');
-                tips.push('Use hair dryers or fans to speed drying');
+                tips.construction.push('Assign each person one letter to create');
+                tips.construction.push('Use hair dryers or fans to speed drying');
             } else if (answers.timeline === 'planned') {
-                tips.push('Test materials and methods first');
-                tips.push('Create templates for consistent lettering');
-                tips.push('Document process for future banners');
+                tips.construction.push('Test materials and methods first');
+                tips.construction.push('Create templates for consistent lettering');
+                tips.finishing.push('Document process for future banners');
             }
             
             // DURABILITY-SPECIFIC
             if (answers.durability === 'weather' || answers.durability === 'longterm') {
                 if (answers.budget !== 'minimal') {
-                    tips.push('UV-resistant clear coat on all painted areas');
-                    tips.push('Double-hem all edges with bonded polyester thread');
-                    tips.push('Brass grommets (not aluminum) for longevity');
-                    tips.push('Store in tube, never folded');
+                    tips.weatherproofing.push('UV-resistant clear coat on all painted areas');
+                    tips.finishing.push('Double-hem all edges with bonded polyester thread');
+                    tips.finishing.push('Brass grommets (not aluminum) for longevity');
+                    tips.finishing.push('Store in tube, never folded');
                 }
             }
+            
+            // General tips always included
+            tips.lettering.push('Block letters with drop shadows for visibility');
+            tips.lettering.push('High contrast between text and background');
+            tips.construction.push('Use chalk or pencil to sketch before committing');
+            tips.finishing.push('Take photos from distance to check readability');
             
             return { materials, methods, tips, specs };
         }
@@ -1179,17 +1285,66 @@
             });
             html += '</ul></div>';
             
-            // Pro Tips
+            // Organized Pro Tips
             html += `
                 <div class="section">
                     <div class="section-icon">💡</div>
                     <h3>Pro Tips</h3>
-                    <ul>
             `;
-            recommendation.tips.forEach(t => {
-                html += `<li>${t}</li>`;
-            });
-            html += '</ul></div>';
+            
+            // Lettering Tips
+            if (recommendation.tips.lettering.length > 0) {
+                html += `
+                    <div class="tip-category">
+                        <h4><span class="tip-category-icon">✏️</span> Lettering & Design</h4>
+                        <ul>
+                `;
+                recommendation.tips.lettering.forEach(t => {
+                    html += `<li>${t}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Construction Tips
+            if (recommendation.tips.construction.length > 0) {
+                html += `
+                    <div class="tip-category">
+                        <h4><span class="tip-category-icon">🔨</span> Construction</h4>
+                        <ul>
+                `;
+                recommendation.tips.construction.forEach(t => {
+                    html += `<li>${t}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Weatherproofing Tips
+            if (recommendation.tips.weatherproofing.length > 0) {
+                html += `
+                    <div class="tip-category">
+                        <h4><span class="tip-category-icon">☔</span> Weatherproofing</h4>
+                        <ul>
+                `;
+                recommendation.tips.weatherproofing.forEach(t => {
+                    html += `<li>${t}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Finishing Tips
+            if (recommendation.tips.finishing.length > 0) {
+                html += `
+                    <div class="tip-category">
+                        <h4><span class="tip-category-icon">✨</span> Finishing Touches</h4>
+                        <ul>
+                `;
+                recommendation.tips.finishing.forEach(t => {
+                    html += `<li>${t}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            html += '</div>'; // Close section
             
             // Action buttons
             html += `
@@ -1273,9 +1428,35 @@
             });
             
             text += "\nPRO TIPS:\n";
-            content.tips.forEach(t => {
-                text += `• ${t}\n`;
-            });
+            
+            // Organize tips by category for text output
+            if (content.tips.lettering && content.tips.lettering.length > 0) {
+                text += "\nLettering & Design:\n";
+                content.tips.lettering.forEach(t => {
+                    text += `• ${t}\n`;
+                });
+            }
+            
+            if (content.tips.construction && content.tips.construction.length > 0) {
+                text += "\nConstruction:\n";
+                content.tips.construction.forEach(t => {
+                    text += `• ${t}\n`;
+                });
+            }
+            
+            if (content.tips.weatherproofing && content.tips.weatherproofing.length > 0) {
+                text += "\nWeatherproofing:\n";
+                content.tips.weatherproofing.forEach(t => {
+                    text += `• ${t}\n`;
+                });
+            }
+            
+            if (content.tips.finishing && content.tips.finishing.length > 0) {
+                text += "\nFinishing Touches:\n";
+                content.tips.finishing.forEach(t => {
+                    text += `• ${t}\n`;
+                });
+            }
             
             const blob = new Blob([text], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
@@ -1294,7 +1475,15 @@
             
             text += "MATERIALS:\n" + content.materials.map(m => `• ${m}`).join("\n") + "\n\n";
             text += "METHODS:\n" + content.methods.map(m => `• ${m}`).join("\n") + "\n\n";
-            text += "TIPS:\n" + content.tips.map(t => `• ${t}`).join("\n");
+            text += "TIPS:\n";
+            
+            // Add categorized tips
+            if (content.tips.lettering && content.tips.lettering.length > 0) {
+                text += "\nLettering: " + content.tips.lettering.join(" | ");
+            }
+            if (content.tips.construction && content.tips.construction.length > 0) {
+                text += "\nConstruction: " + content.tips.construction.join(" | ");
+            }
             
             navigator.clipboard.writeText(text).then(() => {
                 showNotification('✓ Copied to clipboard!');
