@@ -24,6 +24,18 @@ Access the tool at: [https://iancapstick.github.io/bannerapp/banner-tool.html](h
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Embeddable**: Can be embedded in other websites using an iframe
 
+## Contributing
+
+Feedback and contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+
+This tool is free to use and modify. Created to support activists and community organizers worldwide.
+
+## Acknowledgments
+
+Special thanks to our beta testers whose valuable feedback helped shape this tool into what it is today.
+
 ## Embedding the Tool
 
 To embed this tool in your website, use:
@@ -49,12 +61,3 @@ window.addEventListener('message', function(e) {
     }
 });
 </script>
-
-## Contributing
-Feedback and contributions are welcome! Please open an issue or submit a pull request.
-
-License
-This tool is free to use and modify. Created to support activists and community organizers worldwide.
-
-Acknowledgments
-Special thanks to our beta testers whose valuable feedback helped shape this tool into what it is today.
